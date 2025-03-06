@@ -1,0 +1,5 @@
+{
+  "SOLANA_WALLET": "your_solana_wallet_here",
+  "SOLANA_API": "https://solana.publicnode.com",
+  "UPDATE_INTERVAL": 5050
+}
