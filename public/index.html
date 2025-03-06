@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balance Widget</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            text-align: center;
+            color: #fff;
+            background: transparent;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .widget {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 30px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d); /* Градиент */
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 100%;
+            max-width: 500px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        .title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #00ff00;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            text-shadow: 0px 0px 8px rgba(0, 255, 0, 0.7);
+        }
+        .balance-text {
+            font-size: 22px;
+            font-weight: bold;
+            color: #ffffff;
+            margin: 5px 0;
+        }
+        .pnl {
+            font-size: 20px;
+            font-weight: bold;
+            color: #00ff00;
+            text-shadow: 0px 0px 10px rgba(0, 255, 0, 0.5);
+            margin-top: 10px;
+        }
+        .pnl.negative {
+            color: #ff4444;
+            text-shadow: 0px 0px 10px rgba(255, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+<div class="widget">
+    <div class="title">DON'T COPY TRADE</div>
+    <div class="balance-text">Start balance: <span id="startBalance">0</span> SOL</div>
+    <div class="balance-text">Total balance: <span id="currentBalance">0</span> SOL</div>
+    <div class="pnl">PnL today: <span id="pnl">0</span> SOL</div>
+</div>
+
+<script>
+    const ws = new WebSocket("ws://localhost:3001");
+
+    ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+
+        document.getElementById("startBalance").innerText = data.startBalance.toFixed(2);
+        document.getElementById("currentBalance").innerText = data.currentBalance.toFixed(2);
+        document.getElementById("pnl").innerText = data.pnl;
+
+        if (data.pnl < 0) {
+            document.getElementById("pnl").classList.add("negative");
+        } else {
+            document.getElementById("pnl").classList.remove("negative");
+        }
+
+        document.querySelector(".widget").style.maxWidth = data.width + "px";
+    };
+</script>
+</body>
+</html>
